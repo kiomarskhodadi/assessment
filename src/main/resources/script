@@ -1,0 +1,97 @@
+// Postgres DB
+CREATE USER assessment_user WITH PASSWORD '123456';
+CREATE DATABASE assessment_db  owner assessment_user;
+GRANT ALL PRIVILEGES ON DATABASE assessment_db TO assessment_user;
+
+// Assessment DB
+create table assessment_data.name_basics
+(
+	nconst varchar,
+	primary_name varchar,
+	birth_year integer,
+	death_year integer,
+	primary_profession varchar,
+	known_for_titles varchar
+);
+
+alter table assessment_data.name_basics owner to assessment_user;
+
+create table assessment_data.title_akas
+(
+	title_id varchar,
+	ordering integer,
+	title varchar,
+	region varchar,
+	akas_language varchar,
+	akas_types varchar,
+	attributes varchar,
+	is_original_title integer
+);
+
+alter table assessment_data.title_akas owner to assessment_user;
+
+create table assessment_data.title_basics
+(
+	tconst varchar,
+	title_type varchar,
+	primary_title varchar,
+	original_title varchar,
+	is_adult integer,
+	start_year integer,
+	end_year integer,
+	runtime_minutes integer,
+	genres varchar
+);
+
+alter table assessment_data.title_basics owner to assessment_user;
+
+create table assessment_data.title_crew
+(
+	tconst varchar,
+	directors varchar,
+	writers varchar
+);
+
+alter table assessment_data.title_crew owner to assessment_user;
+
+create table assessment_data.title_episode
+(
+	tconst varchar,
+	parent_tconst varchar,
+	season_number integer,
+	episode_number integer
+);
+
+alter table assessment_data.title_episode owner to assessment_user;
+
+create table assessment_data.title_principles
+(
+	tconst varchar,
+	ordering integer,
+	nconst varchar,
+	principle_category varchar,
+	job varchar,
+	characters varchar
+);
+
+alter table assessment_data.title_principles owner to assessment_user;
+
+create table assessment_data.title_ratings
+(
+	tconst varchar,
+	average_rating real,
+	num_votes integer
+);
+
+alter table assessment_data.title_ratings owner to assessment_user;
+
+
+
+select tb.*
+from (select * from title_crew where writers is not null and directors is not null and string_to_array(writers, ',') && string_to_array(directors, ',') )  c
+    inner join title_basics tb on c.tconst = tb.tconst
+ inner join name_basics nb on string_to_array(c.writers, ',') && ARRAY[nb.nconst]::text[]
+where c.writers is not null and c.directors is not null and string_to_array(c.writers, ',') && string_to_array(c.directors, ',')
+ and nb.death_year is null
+    fetch
+    first 10 rows only;
