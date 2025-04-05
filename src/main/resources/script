@@ -95,3 +95,50 @@ where c.writers is not null and c.directors is not null and string_to_array(c.wr
  and nb.death_year is null
     fetch
     first 10 rows only;
+
+
+
+select tb.*
+from title_crew   c
+         inner join title_basics tb on c.tconst = tb.tconst
+         inner join name_basics nb on array_length(ARRAY(
+                                                           SELECT unnest(string_to_array(writers, ','))
+                                                           INTERSECT
+                                                           SELECT unnest(string_to_array(directors, ','))
+                                                       ),1) > 0 and ARRAY(
+                                              SELECT unnest(string_to_array(writers, ','))
+                                              INTERSECT
+                                              SELECT unnest(string_to_array(directors, ','))
+                                          ) && ARRAY[nb.nconst]::text[]
+where  nb.death_year is null
+    fetch
+    first 10 rows only;
+
+select * from name_basics nb inner join
+
+(select
+    ARRAY(
+            SELECT unnest(string_to_array(writers, ','))
+            INTERSECT
+            SELECT unnest(string_to_array(directors, ','))
+        ) AS common_elements, writers,directors
+    from title_crew
+         where writers is not null
+           and directors is not null
+           and string_to_array(writers, ',') && string_to_array(directors, ',')) as c on c.common_elements && ARRAY[nb.nconst]::text[]
+where nb.death_year is null
+    fetch
+    first 10 rows only;
+
+select
+     ARRAY(
+             SELECT unnest(string_to_array(writers, ','))
+             INTERSECT
+             SELECT unnest(string_to_array(directors, ','))
+         ) AS common_elements, writers,directors
+ from title_crew
+where array_length(ARRAY(
+           SELECT unnest(string_to_array(writers, ','))
+             INTERSECT
+             SELECT unnest(string_to_array(directors, ','))
+         ),1) > 0;
