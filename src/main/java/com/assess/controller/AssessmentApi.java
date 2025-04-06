@@ -1,6 +1,7 @@
 package com.assess.controller;
 
 import com.assess.dao.entity.TitleBasics;
+import com.assess.service.dto.TitleBasicsDto;
 import com.assess.service.sevices.ITitleBaseSrv;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class AssessmentApi {
     private ITitleBaseSrv titleBaseSrv;
 
     @PostMapping("/first")
-    public ResponseEntity<List<TitleBasics>> getTitleBasic(){
-        List<TitleBasics> retVal ;
+    public ResponseEntity<List<TitleBasicsDto>> getTitleBasic(){
+        List<TitleBasicsDto> retVal ;
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/ordinary").toUriString());
         try{
            retVal = titleBaseSrv.getAllTitleBasics();
