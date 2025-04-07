@@ -13,6 +13,7 @@ public enum BusinessCodeException {
 
     SYSTEM_EXCEPTION(1),
     DATABASE_EXCEPTION(2),
+    BAD_PARAMETER(3),
     UNDEFINED(2000);
 
     private int businessCodeException;

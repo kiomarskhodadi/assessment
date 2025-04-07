@@ -1,8 +1,10 @@
 package com.assess.common.form;
 
 import com.assess.common.exception.BusinessCodeException;
-import lombok.*;
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 
 /**
@@ -14,18 +16,15 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class ABaseForm implements Serializable {
+public class OutputAPIForm<T>  extends ABaseForm{
 
-    private ArrayList<BusinessCodeException> errors = new ArrayList<>();
-    private String message = "" ;
-    private boolean success = true;
-    private boolean nextPage = false;
-
-    public ABaseForm(){
+    private T data;
+    public OutputAPIForm(){
         setErrors( new ArrayList<>());
         setMessage("");
         setSuccess(true);
         setNextPage(false);
+
     }
 
 }

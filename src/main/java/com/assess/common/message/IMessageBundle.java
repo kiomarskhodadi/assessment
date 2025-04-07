@@ -1,6 +1,6 @@
 package com.assess.common.message;
 
-import com.assess.common.form.OutputAPI;
+import com.assess.common.form.OutputAPIForm;
 
 import java.util.Locale;
 
@@ -12,8 +12,8 @@ import java.util.Locale;
 
 
 public interface IMessageBundle {
-    void createMsg(OutputAPI obj, Locale locale);
-    void createMsg(OutputAPI obj);
+    void createMsg(OutputAPIForm obj, Locale locale);
+    void createMsg(OutputAPIForm obj);
     String getMessage(String key, Locale locale);
 
 }
