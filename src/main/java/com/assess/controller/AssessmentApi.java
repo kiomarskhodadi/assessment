@@ -1,5 +1,7 @@
 package com.assess.controller;
 
+import com.assess.common.form.OutputAPI;
+import com.assess.common.message.IMessageBundle;
 import com.assess.dao.entity.TitleBasics;
 import com.assess.service.dto.TitleBasicsDto;
 import com.assess.service.sevices.ITitleBaseSrv;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,17 +26,20 @@ public class AssessmentApi {
 
     @Autowired
     private ITitleBaseSrv titleBaseSrv;
+    @Autowired
+    private IMessageBundle messageBundle;
 
     @PostMapping("/first")
-    public ResponseEntity<List<TitleBasicsDto>> getTitleBasic(){
-        List<TitleBasicsDto> retVal ;
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/ordinary").toUriString());
+    public ResponseEntity<OutputAPI> getTitleBasic(){
+        OutputAPI<ArrayList<TitleBasicsDto>> retVal ;
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/v1/question/first").toUriString());
         try{
            retVal = titleBaseSrv.getAllTitleBasics();
         }catch (Exception e){
             e.printStackTrace();
             retVal = null;
         }
+        messageBundle.createMsg(retVal);
         return ResponseEntity.created(uri).body(retVal);
     }
 }

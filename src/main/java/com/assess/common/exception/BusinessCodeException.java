@@ -1,4 +1,4 @@
-package com.assess.common;
+package com.assess.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -10,7 +10,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 public enum BusinessCodeException {
+
     SYSTEM_EXCEPTION(1),
+    DATABASE_EXCEPTION(2),
     UNDEFINED(2000);
 
     private int businessCodeException;
@@ -30,6 +32,5 @@ public enum BusinessCodeException {
             this.businessCodeException = 2000;
         }
     }
-
 
 }

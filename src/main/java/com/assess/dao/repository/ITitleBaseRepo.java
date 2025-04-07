@@ -11,10 +11,10 @@ import java.util.List;
 public interface ITitleBaseRepo extends JpaRepository<TitleBasics,String> {
     @Query(value =
             " SELECT tb.*                                                                               " +
-            "  FROM title_crew c                                                                        " +
-            "         INNER JOIN title_basics tb ON c.tconst = tb.tconst                                " +
+            "  FROM assessment_data.title_crew c                                                                         " +
+            "         INNER JOIN assessment_data.title_basics tb ON c.tconst = tb.tconst                                " +
             "         CROSS JOIN LATERAL unnest(string_to_array(c.writers, ',')) AS writer (nconst)     " +
-            "         INNER JOIN name_basics nb ON nb.nconst = writer.nconst                            " +
+            "         INNER JOIN assessment_data.name_basics nb ON nb.nconst = writer.nconst                            " +
             " WHERE c.writers IS NOT NULL                                                               " +
             "  AND c.directors IS NOT NULL                                                              " +
             "  AND EXISTS (                                                                             " +
