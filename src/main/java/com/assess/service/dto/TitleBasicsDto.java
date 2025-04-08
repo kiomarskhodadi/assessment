@@ -8,8 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
+import static com.assess.common.utilities.GeneralUtility.convertToInteger;
 
 /**
  * @Creator 4/6/2025
@@ -42,5 +45,24 @@ public class TitleBasicsDto {
                 ent.getEndYear(),
                 ent.getRuntimeMinutes(),
                 null);
+    }
+
+    public TitleBasicsDto(String line){
+        String[] cells = line.split("\t");
+        try{
+            if(!cells[0].equals("tconst")){
+                tconst = cells[0];
+                titleType = cells[1];
+                primaryTitle = cells[2];
+                originalTitle = cells[3];
+                isAdult = cells[4];
+                startYear = convertToInteger(cells[5]);
+                endYear =   convertToInteger(cells[6]);
+                runtimeMinutes =  convertToInteger(cells[7]);
+                genres = StringUtils.hasLength(cells[8])?Arrays.asList(cells[8].split(",")): null;
+            }
+        }catch (Exception e){
+            tconst = "";
+        }
     }
 }

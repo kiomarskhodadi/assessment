@@ -26,6 +26,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -68,7 +69,22 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+				<execution>
+					<configuration>
+						<mainClass>com.baeldung.heap.HeapSizeDemoApplication</mainClass>
+					</configuration>
+				</execution>
+				</executions>
+				<configuration>
+					<executable>true</executable>
+					<jvmArguments>
+						-Xms7g
+						-Xmx9g
+					</jvmArguments>
+				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 
