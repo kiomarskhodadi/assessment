@@ -30,10 +30,10 @@ public class AssessmentApi {
     private ITitleBaseSrv titleBaseSrv;
     @Autowired
     private IMessageBundle messageBundle;
-    @Autowired
-    private JobLauncher jobLauncher;
-    @Autowired
-    private Job job;
+//    @Autowired
+//    private JobLauncher jobLauncher;
+//    @Autowired
+//    private Job job;
 
     @GetMapping("/first")
     public ResponseEntity<OutputAPIForm> getAllTitleBasic(){
@@ -90,16 +90,16 @@ public class AssessmentApi {
         return ResponseEntity.created(uri).body(retVal);
     }
 
-    @GetMapping("/runJob")
-    public BatchStatus load() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        JobParameters jobParameters = new JobParametersBuilder()
-                .addDate("timestamp", Calendar.getInstance().getTime())
-                .toJobParameters();
-        JobExecution jobExecution = jobLauncher.run(job, jobParameters);
-        while (jobExecution.isRunning()){
-            System.out.println("..................");
-        }
-        return jobExecution.getStatus();
-    }
+//    @GetMapping("/runJob")
+//    public BatchStatus load() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+//        JobParameters jobParameters = new JobParametersBuilder()
+//                .addDate("timestamp", Calendar.getInstance().getTime())
+//                .toJobParameters();
+//        JobExecution jobExecution = jobLauncher.run(job, jobParameters);
+//        while (jobExecution.isRunning()){
+//            System.out.println("..................");
+//        }
+//        return jobExecution.getStatus();
+//    }
 
 }

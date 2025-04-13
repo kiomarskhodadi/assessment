@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,7 @@ public class TitleBaseGenresWriters implements ItemWriter<TitleGenresProcessor> 
     @Override
     public void write(Chunk<? extends TitleGenresProcessor> items) throws Exception {
 
-        TitleBasics allA = items.getItems().stream().findFirst().get().getTitleBasics();
+        List<TitleBasics> allA = items.getItems().stream().map(comp -> comp.getTitleBasics()).collect(Collectors.toList());
         List<TitleGenres> allB = items.getItems().stream()
                 .flatMap(comp -> comp.getTitleGenres().stream())
                 .collect(Collectors.toList());

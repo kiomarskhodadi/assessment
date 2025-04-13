@@ -11,4 +11,14 @@ public class GeneralUtility {
         return retVal;
     }
 
+    public static Float convertToFloat(String str){
+        Float retVal = null;
+        try{
+            retVal = Float.parseFloat(str);
+        }catch (Exception e){
+            retVal = null;
+        }
+        return retVal;
+    }
+
 }

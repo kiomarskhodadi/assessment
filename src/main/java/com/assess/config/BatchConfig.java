@@ -12,6 +12,7 @@ import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -22,9 +23,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
 import java.util.concurrent.ThreadPoolExecutor;
 
 
@@ -37,7 +40,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 @EnableBatchProcessing
-//@ConditionalOnMissingBean(value = DefaultBatchConfiguration.class, annotation = EnableBatchProcessing.class)
 @EnableConfigurationProperties(BatchProperties.class)
 public class BatchConfig  {
     public final INameBasicsRepo nameBasicsRepo;
@@ -46,7 +48,12 @@ public class BatchConfig  {
     public final EntityManagerFactory entityManagerFactory;
     public final PlatformTransactionManager transactionManager;
 
-    public BatchConfig(INameBasicsRepo nameBasicsRepo, ITitleBaseRepo titleBaseRepo, JobRepository jobRepository, EntityManagerFactory entityManagerFactory, PlatformTransactionManager transactionManager) {
+    public BatchConfig(INameBasicsRepo nameBasicsRepo,
+                       ITitleBaseRepo titleBaseRepo,
+                       JobRepository jobRepository,
+                       EntityManagerFactory entityManagerFactory,
+                       PlatformTransactionManager transactionManager) {
+
         this.nameBasicsRepo = nameBasicsRepo;
         this.titleBaseRepo = titleBaseRepo;
         this.jobRepository = jobRepository;
@@ -54,19 +61,23 @@ public class BatchConfig  {
         this.transactionManager = transactionManager;
     }
 
+    public  ResourceCleanupListener cleanUp(){
+        ResourceCleanupListener retVal = new ResourceCleanupListener(entityManagerFactory);
+        return retVal;
+    }
+
     @Bean
     public TaskExecutor taskExecutorStep() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(10);
         executor.setMaxPoolSize(20);
-        executor.setQueueCapacity(100);
+        executor.setQueueCapacity(20);
         executor.setThreadNamePrefix("Step-thread-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setKeepAliveSeconds(2);
         executor.initialize();
         return executor;
     }
-
-
     @Bean
     public FlatFileItemReader<TitleBasics> readerTitleBasics() {
         FlatFileItemReader<TitleBasics> retVal = new FlatFileItemReaderBuilder<TitleBasics>()
@@ -89,16 +100,18 @@ public class BatchConfig  {
     public TitleBaseGenresWriters writerTitleBasics() {
         return new TitleBaseGenresWriters(entityManagerFactory);
     }
-
     @Bean
     public Step importTitleBasics() {
         return new StepBuilder("importTitleBasics", jobRepository)
-                .<TitleBasics, TitleGenresProcessor>chunk(50000, transactionManager)
+                .<TitleBasics, TitleGenresProcessor>chunk(50, transactionManager)
                 .reader(readerTitleBasics())
+                .processor(titleBasicsProcessor())
                 .writer(writerTitleBasics())
                 .taskExecutor(taskExecutorStep())
+                .listener(cleanUp())
                 .build();
     }
+
 
     @Bean
     public FlatFileItemReader<TitlePrinciples> readerTitlePrinciple() {
@@ -114,24 +127,22 @@ public class BatchConfig  {
                 .build();
         return retVal;
     }
-
     @Bean
     public JpaItemWriter<TitlePrinciples> writerTitlePrinciples() {
         JpaItemWriter<TitlePrinciples> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
-
     @Bean
     public Step importTitlePrinciple() {
         return new StepBuilder("importTitlePrinciple", jobRepository)
-                .<TitlePrinciples, TitlePrinciples>chunk(50000, transactionManager)
+                .<TitlePrinciples, TitlePrinciples>chunk(50, transactionManager)
                 .reader(readerTitlePrinciple())
                 .writer(writerTitlePrinciples())
                 .taskExecutor(taskExecutorStep())
+                .listener(cleanUp())
                 .build();
     }
-
     @Bean
     public FlatFileItemReader<TitleRatings> readerTitleRating() {
         FlatFileItemReader<TitleRatings> retVal = new FlatFileItemReaderBuilder<TitleRatings>()
@@ -146,21 +157,20 @@ public class BatchConfig  {
                 .build();
         return retVal;
     }
-
     @Bean
     public JpaItemWriter<TitleRatings> writerTitleRating() {
         JpaItemWriter<TitleRatings> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
-
     @Bean
     public Step importTitleRating() {
         return new StepBuilder("importTitleRating", jobRepository)
-                .<TitleRatings, TitleRatings>chunk(50000, transactionManager)
+                .<TitleRatings, TitleRatings>chunk(50, transactionManager)
                 .reader(readerTitleRating())
                 .writer(writerTitleRating())
                 .taskExecutor(taskExecutorStep())
+                .listener(cleanUp())
                 .build();
     }
     @Bean
@@ -177,7 +187,6 @@ public class BatchConfig  {
                 .build();
         return retVal;
     }
-
     @Bean
     public JpaItemWriter<NameBasics> writerNameBasics() {
         JpaItemWriter<NameBasics> writer = new JpaItemWriter<>();
@@ -187,13 +196,13 @@ public class BatchConfig  {
     @Bean
     public Step importNameBasics() {
         return new StepBuilder("importNameBasics", jobRepository)
-                .<NameBasics, NameBasics>chunk(50000, transactionManager)
+                .<NameBasics, NameBasics>chunk(50, transactionManager)
                 .reader(readerNameBasics())
                 .writer(writerNameBasics())
                 .taskExecutor(taskExecutorStep())
+                .listener(cleanUp())
                 .build();
     }
-
     @Bean
     public FlatFileItemReader<TitleCrewDto> readerTitleCrew() {
         return new FlatFileItemReaderBuilder<TitleCrewDto>()
@@ -211,22 +220,20 @@ public class BatchConfig  {
     public TitleCrewProcessor processor() {
         return new TitleCrewProcessor();
     }
-
     @Bean
     public TitleDirectorsWritersWriters writer() {
         return new TitleDirectorsWritersWriters(entityManagerFactory);
     }
-
     @Bean
     public Step importTitleCrew() {
         return new StepBuilder("importTitleCrew", jobRepository)
-                .<TitleCrewDto, TitleDirectorsWritersProcessor>chunk(50000,transactionManager)
+                .<TitleCrewDto, TitleDirectorsWritersProcessor>chunk(50,transactionManager)
                 .reader(readerTitleCrew())
                 .processor(processor())
                 .writer(writer())
+                .listener(cleanUp())
                 .build();
     }
-
     @Bean
     public Job importDataJob() {
         Flow flowNameBasics = new FlowBuilder<Flow>("flowNameBasics")
@@ -246,11 +253,12 @@ public class BatchConfig  {
                 .build();
         Flow splitFlow = new FlowBuilder<Flow>("splitFlow")
                 .split(taskExecutorStep())
-//                .add( flowTitleBasics,flowNameBasics,flowTitleCrew,flowTitlePrinciple,flowTitleRating)
-                .add( flowTitleBasics)
+                .add( flowTitleBasics,flowNameBasics,flowTitleCrew,flowTitlePrinciple,flowTitleRating)
+//                .add( flowTitleBasics)
                 .build();
         return new JobBuilder("importDataJob", jobRepository)
                 .start(splitFlow)
+
                 .end()
                 .build();
 

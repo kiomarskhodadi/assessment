@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @Slf4j
+@EnableBatchProcessing
 @SpringBootApplication
 public class AssessmentApplication {
 

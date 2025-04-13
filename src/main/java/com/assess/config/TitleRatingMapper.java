@@ -9,12 +9,11 @@ import org.springframework.batch.item.file.transform.FieldSet;
 public class TitleRatingMapper implements FieldSetMapper<TitleRatings> {
     @Override
     public TitleRatings mapFieldSet(FieldSet fieldSet)  {
-
         TitleRatings retVal = new TitleRatings();
         try{
             retVal.setTconst(fieldSet.readString("tconst"));
-            retVal.setAverageRating(fieldSet.readFloat("ordering"));
-            retVal.setNumVotes(GeneralUtility.convertToInteger(fieldSet.readString("nconst")));
+            retVal.setAverageRating(GeneralUtility.convertToFloat(fieldSet.readString("averageRating")));
+            retVal.setNumVotes(GeneralUtility.convertToInteger(fieldSet.readString("numVotes")));
         }catch (Exception e){
             log.error("Error In read : " ,e);
             e.printStackTrace();

@@ -28,11 +28,11 @@ public interface ITitleBaseRepo extends JpaRepository<TitleBasics,Integer> {
 //    List<TitleBasics> getTitleBaseQuestionFirst(PageRequest page);
 
     @Query(value =
-            " SELECT tb.* " +
-            " FROM title_crew c " +
-            " INNER JOIN title_basics tb ON c.tconst = tb.tconst " +
-            " INNER JOIN TABLE(STRING_SPLIT(c.writers, ',')) writer(nconst) ON writer.tconst = c.tconst " +
-            " INNER JOIN name_basics nb ON nb.nconst = TRIM(writer.nconst) ",
+            " SELECT t.* " +
+            " FROM title_basics t " +
+            " INNER JOIN title_directors td ON t.tconst = td.tconst " +
+            " INNER JOIN Title_Writers tw ON tw.tconst = t.tconst " +
+            "  WHERE td.DIRECTOR = tw.WRITER ",
             nativeQuery = true)
     List<TitleBasics> getTitleBaseQuestionFirst(PageRequest page);
     @Query(value =
