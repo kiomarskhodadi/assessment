@@ -6,19 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "TITLE_RATINGS")
+@Table(name = "Title_Writers")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TitleRatings {
+public class TitleWriters  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Title_Rating_Id")
-    private Integer  TitleRatingsId;
+    @Column(name = "TITLE_DIRECTORS_ID" )
+    private Integer titleWritersId;
     @Column(name = "TCONST")
     private String  tconst;
-    @Column(name = "AVERAGE_RATING")
-    private Float averageRating;
-    @Column(name = "NUM_VOTES")
-    private Integer numVotes;
+    @Column(name = "WRITER")
+    private String writer;
 }

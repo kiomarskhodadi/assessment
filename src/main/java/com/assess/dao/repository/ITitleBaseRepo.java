@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.awt.print.Pageable;
 import java.util.List;
 
-public interface ITitleBaseRepo extends JpaRepository<TitleBasics,String> {
+public interface ITitleBaseRepo extends JpaRepository<TitleBasics,Integer> {
 //    @Query(value =
 //            " SELECT tb.*                                                                               " +
 //            "  FROM title_crew c                                                                         " +

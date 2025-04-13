@@ -1,9 +1,6 @@
 package com.assess.dao.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TitlePrinciples {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Title_Principles_Id")
+    private Integer  TitlePrinciplesId;
     @Column(name = "TCONST")
     private String  tconst;
-    @Id
     @Column(name = "ORDERING")
     private Integer ordering;
     @Column(name = "NCONST")

@@ -4,10 +4,13 @@ application:
     name: assessment
 spring:
   datasource:
-    url: jdbc:h2:mem:mydb
+    url: jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password: password
     driverClassName: org.h2.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
@@ -17,9 +20,31 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
+        jdbc:
+          batch_size: 100000
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+
     h2:
       console:
+        setting:
         enable: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
   freemarker:
     allow-session-override:
+  batch:
+    tialize-schema: always
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+  h2:
+    console:
+      settings:
+        web-allow-others: true
 
+inputFile: classpath://title.basics.tsv

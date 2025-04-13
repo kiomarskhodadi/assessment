@@ -6,6 +6,11 @@ import com.assess.common.message.IMessageBundle;
 import com.assess.service.dto.TitleBasicsDto;
 import com.assess.service.sevices.ITitleBaseSrv;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.*;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -14,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 @RestController
 @RequestMapping("/v1/question")
@@ -24,6 +30,11 @@ public class AssessmentApi {
     private ITitleBaseSrv titleBaseSrv;
     @Autowired
     private IMessageBundle messageBundle;
+    @Autowired
+    private JobLauncher jobLauncher;
+    @Autowired
+    private Job job;
+
     @GetMapping("/first")
     public ResponseEntity<OutputAPIForm> getAllTitleBasic(){
         OutputAPIForm<ArrayList<TitleBasicsDto>> retVal = new OutputAPIForm<>() ;
@@ -39,8 +50,7 @@ public class AssessmentApi {
         return ResponseEntity.created(uri).body(retVal);
     }
     @GetMapping("/second")
-    public ResponseEntity<OutputAPIForm> getTitleBasicActors(@RequestParam(required = false) String actorFirst,
-                                                             @RequestParam(required = false) String actorSecond){
+    public ResponseEntity<OutputAPIForm> getTitleBasicActors(@RequestParam(required = false) String actorFirst, @RequestParam(required = false) String actorSecond){
         OutputAPIForm<ArrayList<TitleBasicsDto>> retVal = new OutputAPIForm<>();
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/v1/question/first").toUriString());
         try{
@@ -79,4 +89,17 @@ public class AssessmentApi {
         messageBundle.createMsg(retVal);
         return ResponseEntity.created(uri).body(retVal);
     }
+
+    @GetMapping("/runJob")
+    public BatchStatus load() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addDate("timestamp", Calendar.getInstance().getTime())
+                .toJobParameters();
+        JobExecution jobExecution = jobLauncher.run(job, jobParameters);
+        while (jobExecution.isRunning()){
+            System.out.println("..................");
+        }
+        return jobExecution.getStatus();
+    }
+
 }

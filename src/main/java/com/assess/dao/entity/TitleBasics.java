@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Entity
@@ -16,13 +15,16 @@ import java.util.List;
 @AllArgsConstructor
 public class TitleBasics {
     @Id
+    @Column(name = "TITLE_BASICS_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long TitleBasicsId;
     @Column(name = "TCONST")
     private String tconst;
     @Column(name = "TITLE_TYPE")
     private String titleType;
-    @Column(name = "PRIMARY_TITLE")
+    @Column(name = "PRIMARY_TITLE",length = 300)
     private String primaryTitle;
-    @Column(name = "ORIGINAL_TITLE")
+    @Column(name = "ORIGINAL_TITLE",length = 300)
     private String originalTitle;
     @Column(name = "IS_ADULT")
     private String isAdult;
@@ -32,7 +34,8 @@ public class TitleBasics {
     private Integer endYear;
     @Column(name = "RUNTIME_MINUTES")
     private Integer runtimeMinutes;
-    @Convert(converter = StringListConverter.class)
-    @Column(name = "GENRES")
-    private List<String> genres;
+    @Column(name = "TITLE_GENRES")
+    private String titleGenres;
+
+
 }

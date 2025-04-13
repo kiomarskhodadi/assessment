@@ -1,10 +1,7 @@
 package com.assess.dao.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NameBasics {
     @Id
+    @Column(name = "NAME_BASICS_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long nameBasicsId;
     @Column(name = "NCONST")
     private String nconst;
     @Column(name = "PRIMARY_NAME")
