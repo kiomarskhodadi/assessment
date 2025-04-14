@@ -17,12 +17,9 @@ import java.util.stream.Collectors;
 @Service
 public class TitleBaseSrv implements ITitleBaseSrv{
     private final ITitleBaseRepo titleBaseRepo;
-
-
     public TitleBaseSrv(ITitleBaseRepo titleBaseRepo) {
         this.titleBaseRepo = titleBaseRepo;
     }
-
     @Transactional
     public OutputAPIForm<ArrayList<TitleBasicsDto>> getAllTitleBasics(Integer page,Integer pageSize){
         OutputAPIForm<ArrayList<TitleBasicsDto>> retVal = new OutputAPIForm<>();
@@ -56,7 +53,6 @@ public class TitleBaseSrv implements ITitleBaseSrv{
         }
         return retVal;
     }
-
     public OutputAPIForm<ArrayList<TitleBasicsDto>> getAllTitleBasics(String genre,Integer page,Integer pageSize){
         OutputAPIForm<ArrayList<TitleBasicsDto>> retVal = new OutputAPIForm<>();
         try{
