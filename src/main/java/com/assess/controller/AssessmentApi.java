@@ -35,10 +35,6 @@ public class AssessmentApi {
 
     @Autowired
     private CountHttpRequestFilter countHttpRequestFilter;
-//    @Autowired
-//    private JobLauncher jobLauncher;
-//    @Autowired
-//    private Job job;
 
     @GetMapping("/first")
     public ResponseEntity<OutputAPIForm> getAllTitleBasic(@RequestParam(required = false) Integer page,
@@ -111,7 +107,6 @@ public class AssessmentApi {
             log.error("Undefined error in call third API",e);
             retVal.setSuccess(false);
             retVal.getErrors().add(BusinessCodeException.UNDEFINED);
-
         }
         messageBundle.createMsg(retVal);
         return ResponseEntity.created(uri).body(retVal);

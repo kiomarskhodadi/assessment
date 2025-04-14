@@ -1,13 +1,10 @@
 package com.assess.dao.entity;
 
-import com.assess.dao.convertors.StringListConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,9 +17,7 @@ public class TitleCrew {
     @Column(name = "TCONST")
     private String  tconst;
     @Column(name = "DIRECTORS")
-    @Convert(converter = StringListConverter.class)
-    private List<String> directors;
+    private String directors;
     @Column(name = "WRITERS")
-    @Convert(converter = StringListConverter.class)
-    private List<String> writers;
+    private String writers;
 }

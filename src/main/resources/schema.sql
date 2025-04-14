@@ -100,14 +100,14 @@ CREATE TABLE  IF NOT EXISTS BATCH_STEP_EXECUTION_CONTEXT  (
 create table title_directors (tconst varchar(255) not null, director varchar(255), primary key (tconst,director));
 -- create table title_episode (tconst varchar(255) not null, episode_number integer, parent_tconst varchar(255), season_number integer, primary key (tconst))
 create table title_genres (tconst varchar(255) not null, genres varchar(255), primary key (tconst,genres));
-create table title_principles ( characters varchar(255), job varchar(255), nconst varchar(255), ordering integer, principle_category varchar(255), tconst varchar(255), primary key (tconst,nconst,principle_category))
+create table title_principles ( characters varchar(255), job varchar(255), nconst varchar(255), ordering integer, principle_category varchar(255), tconst varchar(255));
 -- create table title_ratings (title_rating_id integer not null, average_rating float(24), num_votes integer, tconst varchar(255), primary key (title_rating_id))
 create table title_writers (tconst varchar(255) not null, writer varchar(255), primary key (tconst,writer));
 -- create index idx_title_basics_tconst on title_basics (tconst)
 create index idx_title_directors_tconst on title_directors (tconst);
 create index idx_title_genres_tconst on title_genres (tconst);
-create index idx_title_principles_tconst on title_principles (tconst)
-create index idx_title_principles_nconst on title_principles (nconst)
+create index idx_title_principles_tconst on title_principles (tconst);
+create index idx_title_principles_nconst on title_principles (nconst);
 create index idx_title_writers_tconst on title_writers (tconst);
 -- create sequence title_principles_seq start with 1 increment by 100
 -- create sequence title_ratings_seq start with 1 increment by 100

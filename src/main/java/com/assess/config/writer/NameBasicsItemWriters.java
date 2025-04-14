@@ -23,13 +23,18 @@ public class NameBasicsItemWriters implements ItemWriter<NameBasics> {
     private static final String SQL = " INSERT INTO name_basics (   " +
                                       "   birth_year,               " +
                                       "   death_year,               " +
-                                      "   known_for_title,          " +
                                       "   nconst,                   " +
+                                      "   known_for_title,          " +
                                       "   primary_name,             " +
                                       "   primary_profession        " +
                                       "   )                         " +
                                       " values (?,?,?,?,?,?);       ";
-
+    private static final String SQL_S = " INSERT INTO name_basics (   " +
+                                      "   birth_year,               " +
+                                      "   death_year,               " +
+                                      "   nconst                    " +
+                                      "   )                         " +
+                                      " values (?,?,?);             ";
     @Autowired
     private DataSource dataSource;
 
@@ -37,14 +42,14 @@ public class NameBasicsItemWriters implements ItemWriter<NameBasics> {
     public void write(Chunk<? extends NameBasics> chunk) throws Exception {
 
         try(Connection con = dataSource.getConnection();
-            PreparedStatement preparedStatement = con.prepareStatement(SQL)){
+            PreparedStatement preparedStatement = con.prepareStatement(SQL_S)){
             for (NameBasics nameBasics : chunk.getItems()) {
                 preparedStatement.setInt(1, Objects.isNull(nameBasics.getBirthYear())? -1 : nameBasics.getBirthYear());
                 preparedStatement.setInt(2, Objects.isNull(nameBasics.getDeathYear())? -1 : nameBasics.getDeathYear());
-                preparedStatement.setString(3, nameBasics.getKnownForTitle());
-                preparedStatement.setString(4, nameBasics.getNconst());
-                preparedStatement.setString(5, nameBasics.getPrimaryName());
-                preparedStatement.setString(6, nameBasics.getPrimaryProfession());
+                preparedStatement.setString(3, nameBasics.getNconst());
+//                preparedStatement.setString(4, nameBasics.getKnownForTitle());
+//                preparedStatement.setString(5, nameBasics.getPrimaryName());
+//                preparedStatement.setString(6, nameBasics.getPrimaryProfession());
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();

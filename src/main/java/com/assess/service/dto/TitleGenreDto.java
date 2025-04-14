@@ -1,11 +1,8 @@
-package com.assess.dao.entity;
+package com.assess.service.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 /**
  * @Creator 4/9/2025
@@ -13,15 +10,10 @@ import java.util.List;
  * @Author k.khodadi
  **/
 
-//@Entity
-//@Table(name = "TITLE_GENRES" ,indexes = @Index(name = "idx_title_genres_tconst ", columnList = "tconst"))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TitleGenres {
-
-//    @Id
+public class TitleGenreDto {
     private String tconst;
     private String genres;
-
 }

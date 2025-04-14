@@ -1,9 +1,6 @@
 package com.assess.service.dto;
 
-import com.assess.dao.convertors.StringListConverter;
 import com.assess.dao.entity.TitleBasics;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+
 import static com.assess.common.utilities.GeneralUtility.convertToInteger;
 
 /**

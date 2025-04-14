@@ -1,8 +1,8 @@
 package com.assess.config.writer;
 
 import com.assess.dao.entity.TitleBasics;
-import com.assess.dao.entity.TitleGenres;
-import com.assess.dao.entity.TitleGenresProcessor;
+import com.assess.service.dto.TitleGenreDto;
+import com.assess.service.dto.TitleGenresDto;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Objects;
 
-public class TitleBaseGenresWriters implements ItemWriter<TitleGenresProcessor> {
+public class TitleBaseGenresWriters implements ItemWriter<TitleGenresDto> {
 
     private static final String SQL = " INSERT INTO title_basics (         " +
                                       "   TCONST,                          " +
@@ -39,12 +39,12 @@ public class TitleBaseGenresWriters implements ItemWriter<TitleGenresProcessor> 
 
 
     @Override
-    public void write(Chunk<? extends TitleGenresProcessor> items) throws Exception {
+    public void write(Chunk<? extends TitleGenresDto> items) throws Exception {
 
         try(Connection con = dataSource.getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(SQL)){
             TitleBasics titleBasic;
-            for(TitleGenresProcessor item:items.getItems()){
+            for(TitleGenresDto item:items.getItems()){
                 titleBasic = item.getTitleBasics();
                 if(Objects.nonNull(titleBasic)){
                     preparedStatement.setString(1, titleBasic.getTconst());
@@ -64,10 +64,10 @@ public class TitleBaseGenresWriters implements ItemWriter<TitleGenresProcessor> 
 
         try(Connection con = dataSource.getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(SQL_GENRES)){
-            for(TitleGenresProcessor item:items.getItems()){
-                for(TitleGenres titleGenres:item.getTitleGenres()){
-                    preparedStatement.setString(1, titleGenres.getTconst());
-                    preparedStatement.setString(2, titleGenres.getGenres());
+            for(TitleGenresDto item:items.getItems()){
+                for(TitleGenreDto titleGenreDto :item.getTitleGenres()){
+                    preparedStatement.setString(1, titleGenreDto.getTconst());
+                    preparedStatement.setString(2, titleGenreDto.getGenres());
                     preparedStatement.addBatch();
                 }
             }

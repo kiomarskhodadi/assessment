@@ -2,13 +2,9 @@ package com.assess.config.mapper;
 
 import com.assess.common.utilities.GeneralUtility;
 import com.assess.dao.entity.TitleBasics;
-import com.assess.dao.entity.TitleGenres;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @Creator 4/9/2025

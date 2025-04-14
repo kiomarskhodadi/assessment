@@ -1,19 +1,17 @@
 package com.assess.config.writer;
 
-import com.assess.dao.entity.*;
-import jakarta.persistence.EntityManagerFactory;
+import com.assess.service.dto.TitleDirectorsWritersDto;
+import com.assess.service.dto.TitleDirectorsDto;
+import com.assess.service.dto.TitleWritersDto;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class TitleDirectorsWritersWriters implements ItemWriter<TitleDirectorsWritersProcessor> {
+public class TitleDirectorsWritersWriters implements ItemWriter<TitleDirectorsWritersDto> {
 
     private static final String SQL_DIRECTORS =
                                     " INSERT INTO title_directors (    " +
@@ -33,13 +31,13 @@ public class TitleDirectorsWritersWriters implements ItemWriter<TitleDirectorsWr
     private DataSource dataSource;
 
     @Override
-    public void write(Chunk<? extends TitleDirectorsWritersProcessor> items) throws Exception {
+    public void write(Chunk<? extends TitleDirectorsWritersDto> items) throws Exception {
         try(Connection con = dataSource.getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(SQL_DIRECTORS)){
-            for(TitleDirectorsWritersProcessor item:items.getItems()){
-                for(TitleDirectors titleDirectors:item.getTitleDirectors()){
-                    preparedStatement.setString(1, titleDirectors.getTconst());
-                    preparedStatement.setString(2, titleDirectors.getDirector());
+            for(TitleDirectorsWritersDto item:items.getItems()){
+                for(TitleDirectorsDto titleDirectorsDto :item.getTitleDirectors()){
+                    preparedStatement.setString(1, titleDirectorsDto.getTconst());
+                    preparedStatement.setString(2, titleDirectorsDto.getDirector());
                     preparedStatement.addBatch();
                 }
             }
@@ -47,10 +45,10 @@ public class TitleDirectorsWritersWriters implements ItemWriter<TitleDirectorsWr
         }
         try(Connection con = dataSource.getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(SQL_WRITERS)){
-            for(TitleDirectorsWritersProcessor item:items.getItems()){
-                for(TitleWriters titleWriters:item.getTitleWriters()){
-                    preparedStatement.setString(1, titleWriters.getTconst());
-                    preparedStatement.setString(2, titleWriters.getWriter());
+            for(TitleDirectorsWritersDto item:items.getItems()){
+                for(TitleWritersDto titleWritersDto :item.getTitleWriters()){
+                    preparedStatement.setString(1, titleWritersDto.getTconst());
+                    preparedStatement.setString(2, titleWritersDto.getWriter());
                     preparedStatement.addBatch();
                 }
             }

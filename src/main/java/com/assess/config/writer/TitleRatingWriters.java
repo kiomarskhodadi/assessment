@@ -1,6 +1,5 @@
 package com.assess.config.writer;
 
-import com.assess.dao.entity.TitlePrinciples;
 import com.assess.dao.entity.TitleRatings;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
@@ -20,10 +19,10 @@ import java.util.Objects;
 
 public class TitleRatingWriters implements ItemWriter<TitleRatings> {
 
-    private static final String SQL = " INSERT INTO title_principles (        " +
+    private static final String SQL = " INSERT INTO title_ratings (           " +
                                       "   tconst,                             " +
-                                      "   averageRating,                      " +
-                                      "   numVotes                            " +
+                                      "   average_rating,                     " +
+                                      "   num_votes                           " +
                                       "   )                                   " +
                                       " values (?,?,?);                       ";
 
