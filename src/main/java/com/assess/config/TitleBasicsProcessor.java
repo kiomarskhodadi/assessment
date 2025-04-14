@@ -13,7 +13,7 @@ public class TitleBasicsProcessor implements ItemProcessor<TitleBasics, TitleGen
 public TitleGenresProcessor process(TitleBasics item) throws Exception {
         TitleGenresProcessor retVal = new TitleGenresProcessor(
                 item,
-                Arrays.stream(item.getTitleGenres().split(",")).map(genre -> new TitleGenres(null,item.getTconst(),genre)).collect(Collectors.toList()));
+                Arrays.stream(item.getTitleGenres().split(",")).map(genre -> new TitleGenres(item.getTconst(),genre)).collect(Collectors.toList()));
         return retVal;
         }
 }

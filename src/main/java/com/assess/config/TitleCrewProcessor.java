@@ -12,8 +12,8 @@ public class TitleCrewProcessor implements ItemProcessor<TitleCrewDto, TitleDire
     @Override
     public TitleDirectorsWritersProcessor process(TitleCrewDto item) throws Exception {
         TitleDirectorsWritersProcessor retVal = new TitleDirectorsWritersProcessor(
-                Arrays.stream(item.getWriters().split(",")).map(writer -> new TitleWriters(null,item.getTconst(),writer)).collect(Collectors.toList()),
-                Arrays.stream(item.getDirectors().split(",")).map(director -> new TitleDirectors(null,item.getTconst(),director)).collect(Collectors.toList())
+                Arrays.stream(item.getWriters().split(",")).map(writer -> new TitleWriters(item.getTconst(),writer)).collect(Collectors.toList()),
+                Arrays.stream(item.getDirectors().split(",")).map(director -> new TitleDirectors(item.getTconst(),director)).collect(Collectors.toList())
         );
         return retVal;
     }

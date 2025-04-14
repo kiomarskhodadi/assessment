@@ -13,18 +13,14 @@ import java.util.List;
  * @Author k.khodadi
  **/
 
-@Entity
-@Table(name = "TITLE_GENRES" ,indexes = @Index(name = "idx_title_genres_tconst ", columnList = "tconst"))
+//@Entity
+//@Table(name = "TITLE_GENRES" ,indexes = @Index(name = "idx_title_genres_tconst ", columnList = "tconst"))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TitleGenres {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "title_genres_seq")
-    @SequenceGenerator(name = "title_genres_seq", sequenceName = "title_genres_seq", allocationSize = 100)
-    @Column(name = "title_genres_id")
-    private Integer titleGenresId;
+//    @Id
     private String tconst;
     private String genres;
 

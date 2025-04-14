@@ -14,11 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TitleBasics {
+//    @Id
+//    @Column(name = "TITLE_BASICS_ID")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TITLE_BASICS_seq")
+//    @SequenceGenerator(name = "TITLE_BASICS_seq", sequenceName = "TITLE_BASICS_seq", allocationSize = 100)
+//    private Long TitleBasicsId;
     @Id
-    @Column(name = "TITLE_BASICS_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TITLE_BASICS_seq")
-    @SequenceGenerator(name = "TITLE_BASICS_seq", sequenceName = "TITLE_BASICS_seq", allocationSize = 100)
-    private Long TitleBasicsId;
     @Column(name = "TCONST")
     private String tconst;
     @Column(name = "TITLE_TYPE")
