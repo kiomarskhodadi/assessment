@@ -1,5 +1,6 @@
 package com.assess.controller;
 
+import com.assess.common.component.CountHttpRequestFilter;
 import com.assess.common.exception.BusinessCodeException;
 import com.assess.common.form.OutputAPIForm;
 import com.assess.common.message.IMessageBundle;
@@ -31,6 +32,9 @@ public class AssessmentApi {
     private IMessageBundle messageBundle;
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private CountHttpRequestFilter countHttpRequestFilter;
 //    @Autowired
 //    private JobLauncher jobLauncher;
 //    @Autowired
@@ -97,9 +101,21 @@ public class AssessmentApi {
         return ResponseEntity.created(uri).body(retVal);
     }
 
+    @GetMapping("/forth")
+    public ResponseEntity<OutputAPIForm> questionForth(){
+        OutputAPIForm<String> retVal = new OutputAPIForm<>();
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/v1/question/forth").toUriString());
+        try{
+            retVal.setData("The number of request is: "  + countHttpRequestFilter.getCount());
+        }catch (Exception e){
+            log.error("Undefined error in call third API",e);
+            retVal.setSuccess(false);
+            retVal.getErrors().add(BusinessCodeException.UNDEFINED);
 
-
-
+        }
+        messageBundle.createMsg(retVal);
+        return ResponseEntity.created(uri).body(retVal);
+    }
 
     @GetMapping("/pool-status")
     public String poolStatus() {
@@ -112,4 +128,6 @@ public class AssessmentApi {
                 hikariDataSource.getHikariPoolMXBean().getThreadsAwaitingConnection()
         );
     }
+
+
 }
