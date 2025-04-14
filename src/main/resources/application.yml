@@ -4,15 +4,14 @@ application:
     name: assessment
 spring:
   datasource:
-#    url: jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
     username: sa
     password: password
     driverClassName: org.h2.Driver
     hikari:
       maximum-pool-size: 50
-      minimum-idle: 10
-      leak-detection-threshold: 2000
+      minimum-idle: 5
+      leak-detection-threshold: 60000
       connection-timeout: 3000
       idle-timeout: 60000
       max-lifetime: 180000
@@ -20,7 +19,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
@@ -30,17 +29,17 @@ spring:
         order_inserts: true
         order_updates: true
         generate_statistics: false
-  sql:
-    init:
-      mode: always
-  freemarker:
-    allow-session-override:
-  batch:
-    tialize-schema: always
-    jdbc:
-      initialize-schema: always
-    job:
-      enabled: false
+#  sql:
+#    init:
+#      mode: always
+#  freemarker:
+#    allow-session-override:
+#  batch:
+#    tialize-schema: always
+#    jdbc:
+#      initialize-schema: always
+#    job:
+#      enabled: false
   h2:
     console:
       enable: true
@@ -49,4 +48,3 @@ spring:
         web-allow-others: true
     defer-datasource-initialization: true
 
-inputFile: classpath://title.basics.tsv

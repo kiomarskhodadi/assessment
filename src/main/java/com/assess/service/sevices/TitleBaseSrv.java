@@ -5,10 +5,10 @@ import com.assess.common.form.OutputAPIForm;
 import com.assess.dao.entity.TitleBasics;
 import com.assess.dao.repository.ITitleBaseRepo;
 import com.assess.service.dto.TitleBasicsDto;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +24,13 @@ public class TitleBaseSrv implements ITitleBaseSrv{
     }
 
     @Transactional
-    public OutputAPIForm<ArrayList<TitleBasicsDto>> getAllTitleBasics(){
+    public OutputAPIForm<ArrayList<TitleBasicsDto>> getAllTitleBasics(Integer page,Integer pageSize){
         OutputAPIForm<ArrayList<TitleBasicsDto>> retVal = new OutputAPIForm<>();
         try{
-            List<TitleBasics> data = titleBaseRepo.getTitleBaseQuestionFirst(  PageRequest.of(0, 10+1, Sort.by("tconst")));
-            if(data != null && data.size() > 10){
+            List<TitleBasics> data = titleBaseRepo.getTitleBaseQuestionFirst(  PageRequest.of(page, pageSize+1, Sort.by("tconst")));
+            if(data != null && data.size() > pageSize){
                 retVal.setNextPage(true);
-                data.remove(10+1);
+                data.remove(pageSize);
             }
             retVal.setData(data.stream().map(ent -> new TitleBasicsDto(ent)).collect(Collectors.toCollection(ArrayList::new)));
         }catch (Exception e){
@@ -39,14 +39,15 @@ public class TitleBaseSrv implements ITitleBaseSrv{
         }
         return retVal;
     }
-    public OutputAPIForm<ArrayList<TitleBasicsDto>> getAllTitleBasics(String actorFirst, String actorSecond){
+    @Transactional
+    public OutputAPIForm<ArrayList<TitleBasicsDto>> getAllTitleBasics(String actorFirst, String actorSecond,Integer page,Integer pageSize){
         OutputAPIForm<ArrayList<TitleBasicsDto>> retVal = new OutputAPIForm<>();
         try{
             List<TitleBasics> data = titleBaseRepo.getTitleBaseQuestionSecond(actorFirst,actorSecond,
-                    PageRequest.of(0, 10+1, Sort.by("tconst")));
-            if(data != null && data.size() > 10){
+                    PageRequest.of(page, pageSize+1, Sort.by("tconst")));
+            if(data != null && data.size() > pageSize){
                 retVal.setNextPage(true);
-                data.remove(10+1);
+                data.remove(pageSize);
             }
             retVal.setData(data.stream().map(ent -> new TitleBasicsDto(ent)).collect(Collectors.toCollection(ArrayList::new)));
         }catch (Exception e){
@@ -56,14 +57,14 @@ public class TitleBaseSrv implements ITitleBaseSrv{
         return retVal;
     }
 
-    public OutputAPIForm<ArrayList<TitleBasicsDto>> getAllTitleBasics(String genre){
+    public OutputAPIForm<ArrayList<TitleBasicsDto>> getAllTitleBasics(String genre,Integer page,Integer pageSize){
         OutputAPIForm<ArrayList<TitleBasicsDto>> retVal = new OutputAPIForm<>();
         try{
             List<TitleBasics> data = titleBaseRepo.getTitleBaseQuestionThird(genre,
-                    PageRequest.of(0, 10+1, Sort.by("tconst")));
-            if(data != null && data.size() > 10){
+                    PageRequest.of(page, pageSize+1, Sort.by("tconst")));
+            if(data != null && data.size() > pageSize){
                 retVal.setNextPage(true);
-                data.remove(10+1);
+                data.remove(pageSize);
             }
             retVal.setData(data.stream().map(ent -> new TitleBasicsDto(ent)).collect(Collectors.toCollection(ArrayList::new)));
         }catch (Exception e){

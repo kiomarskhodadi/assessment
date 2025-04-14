@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 public class NameBasics {
     @Id
     @Column(name = "NAME_BASICS_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NAME_BASICS_seq")
+    @SequenceGenerator(name = "NAME_BASICS_seq", sequenceName = "NAME_BASICS_seq", allocationSize = 100)
     private Long nameBasicsId;
     @Column(name = "NCONST")
     private String nconst;

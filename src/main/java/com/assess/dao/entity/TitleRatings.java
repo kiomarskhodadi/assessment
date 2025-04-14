@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TitleRatings {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TITLE_RATINGS_seq")
+    @SequenceGenerator(name = "TITLE_RATINGS_seq", sequenceName = "TITLE_RATINGS_seq", allocationSize = 100)
     @Column(name = "Title_Rating_Id")
     private Integer  TitleRatingsId;
     @Column(name = "TCONST")

@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "TITLE_BASICS")
+@Table(name = "TITLE_BASICS", indexes = @Index(name = "idx_title_basics_tconst ", columnList = "tconst"))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TitleBasics {
     @Id
     @Column(name = "TITLE_BASICS_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TITLE_BASICS_seq")
+    @SequenceGenerator(name = "TITLE_BASICS_seq", sequenceName = "TITLE_BASICS_seq", allocationSize = 100)
     private Long TitleBasicsId;
     @Column(name = "TCONST")
     private String tconst;

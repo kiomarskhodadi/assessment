@@ -6,14 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Title_Directors")
+@Table(name = "Title_Directors", indexes = @Index(name = "idx_title_directors_tconst ", columnList = "tconst"))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TitleDirectors {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "TITLE_DIRECTORS_ID" )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Title_Directors_seq")
+    @SequenceGenerator(name = "Title_Directors_seq", sequenceName = "Title_Directors_seq", allocationSize = 100)
+    @Column(name = "TITLE_DIRECTORS_ID")
     private Integer titleDirectorsId;
     @Column(name = "TCONST")
     private String  tconst;

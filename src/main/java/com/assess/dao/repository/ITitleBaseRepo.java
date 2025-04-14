@@ -5,10 +5,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.awt.print.Pageable;
 import java.util.List;
-
+@Repository
 public interface ITitleBaseRepo extends JpaRepository<TitleBasics,Integer> {
 //    @Query(value =
 //            " SELECT tb.*                                                                               " +
@@ -31,23 +32,28 @@ public interface ITitleBaseRepo extends JpaRepository<TitleBasics,Integer> {
             " SELECT t.* " +
             " FROM title_basics t " +
             " INNER JOIN title_directors td ON t.tconst = td.tconst " +
-            " INNER JOIN Title_Writers tw ON tw.tconst = t.tconst " +
-            "  WHERE td.DIRECTOR = tw.WRITER ",
+            " INNER JOIN Title_Writers tw ON tw.tconst = t.tconst " ,
+//            "  WHERE td.DIRECTOR = tw.WRITER ",
             nativeQuery = true)
     List<TitleBasics> getTitleBaseQuestionFirst(PageRequest page);
     @Query(value =
-            " select tb.* from title_principles t                       " +
-            "    inner join  title_basics tb on t.tconst = tb.tconst    " +
-            " where t.principle_category = 'actor'                                      " +
-            "  and t.nconst = :actorFirst                                               " +
-            "  and t.nconst = :actorSecond                                              ",
+            " select * from (select tb.* from title_basics tb           " +
+            " where                                                     " +
+            "   tb.tconst in (SELECT b.tconst FROM title_principles b   " +
+            "      WHERE b.nconst = :actorFirst                         " +
+            "        and b.principle_category = 'actor') )ftb           " +
+            "  where                                                    " +
+            "    ftb.tconst in (SELECT b.tconst FROM title_principles b " +
+            "      WHERE b.nconst = :actorSecond                        " +
+            "        and b.principle_category = 'actor')                " ,
             nativeQuery = true)
     List<TitleBasics> getTitleBaseQuestionSecond(@Param(value = "actorFirst") String actorFirst,
                                                  @Param(value = "actorSecond") String actorSecond,
                                                  PageRequest page);
 
     @Query(value =
-            " select r.tconst,                                                                                   " +
+            " select r.title_basics_id,                                                                          " +
+            "       r.tconst,                                                                                    " +
             "       r.title_type,                                                                                " +
             "       r.primary_title,                                                                             " +
             "       r.original_title,                                                                            " +
@@ -55,14 +61,16 @@ public interface ITitleBaseRepo extends JpaRepository<TitleBasics,Integer> {
             "       r.start_year,                                                                                " +
             "       r.end_year,                                                                                  " +
             "       r.runtime_minutes,                                                                           " +
-            "       r.genres                                                                                     " +
+            "       r.title_genres                                                                               " +
             "from (                                                                                              " +
             "select tb.*,                                                                                        " +
             "    rank() OVER (PARTITION BY tb.start_year ORDER BY tr.average_rating desc,tr.num_votes desc ) rn  " +
-            " from title_basics tb                                                               " +
-            "    inner join title_ratings tr on tb.tconst = tr.tconst                            " +
-            "  where tb.genres = :genre ) r                                                                      " +
-            "where rn = 1                                                                                        ",
+            " from title_basics tb                                                                               " +
+            "    inner join title_ratings tr on tb.tconst = tr.tconst                                            " +
+            "  where tb.tconst in                                                                                " +
+            "       (SELECT g.tconst FROM title_genres g                                                         " +
+            "               WHERE g.genres = :genre )) r                                                          " +
+            "where r.rn = 1                                                                                      ",
             nativeQuery = true)
     List<TitleBasics> getTitleBaseQuestionThird(@Param(value = "genre") String genre, PageRequest page);
 }
