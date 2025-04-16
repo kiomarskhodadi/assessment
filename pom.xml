@@ -95,8 +95,8 @@
 				<configuration>
 					<executable>true</executable>
 					<jvmArguments>
-						-Xms7g
-						-Xmx11g
+						-Xms16g
+						-Xmx20g
 					</jvmArguments>
 				</configuration>
 			</plugin>

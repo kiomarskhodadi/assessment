@@ -36,6 +36,7 @@ public class AssessmentApplication {
 		executor.initialize();
 		return executor;
 	}
+
 	@Bean
 	public TaskExecutor taskExecutorSlaveStep() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

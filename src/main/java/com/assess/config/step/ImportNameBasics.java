@@ -25,11 +25,13 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 @EnableBatchProcessing
@@ -41,6 +43,20 @@ public class ImportNameBasics {
     private PlatformTransactionManager transactionManager;
     @Autowired
     private TaskExecutor taskExecutorStep;
+
+
+    @Bean
+    public TaskExecutor taskExecutorStepNameBasics() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(8);
+        executor.setMaxPoolSize(8);
+        executor.setQueueCapacity(20);
+        executor.setThreadNamePrefix("Step-nb-thread-");
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setKeepAliveSeconds(2);
+        executor.initialize();
+        return executor;
+    }
 
     @Bean
     public FlatFileItemReader<NameBasics> readerNameBasics() {
@@ -79,7 +95,7 @@ public class ImportNameBasics {
                 .faultTolerant()
                 .skipLimit(100)
                 .skip(DataIntegrityViolationException.class)
-                .taskExecutor(taskExecutorStep)
+                .taskExecutor(taskExecutorStepNameBasics())
                 .build();
     }
 }

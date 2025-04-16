@@ -49,13 +49,14 @@ public class TitleBaseGenresWriters implements ItemWriter<TitleGenresDto> {
                 if(Objects.nonNull(titleBasic)){
                     preparedStatement.setString(1, titleBasic.getTconst());
                     preparedStatement.setString(2, titleBasic.getTitleType());
-                    preparedStatement.setString(3, titleBasic.getPrimaryTitle());
-                    preparedStatement.setString(4, titleBasic.getOriginalTitle());
+                    preparedStatement.setString(3, "");
+                    preparedStatement.setString(4, "");
                     preparedStatement.setString(5, titleBasic.getIsAdult());
                     preparedStatement.setInt(6, Objects.isNull(titleBasic.getStartYear())? -1 :titleBasic.getStartYear() );
                     preparedStatement.setInt(7, Objects.isNull(titleBasic.getEndYear())? -1 :titleBasic.getEndYear() );
                     preparedStatement.setInt(8, Objects.isNull(titleBasic.getRuntimeMinutes())? -1 :titleBasic.getRuntimeMinutes() );
                     preparedStatement.setString(9, titleBasic.getTitleGenres());
+                    preparedStatement.setString(9, "");
                     preparedStatement.addBatch();
                 }
             }

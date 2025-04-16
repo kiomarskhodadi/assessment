@@ -57,13 +57,15 @@ public class BatchConfig  {
     @Bean
     public Job importDataJob() {
         return new JobBuilder("importDataJob", jobRepository)
-                .start(importNameBasic)
-                .next(importTitleBasic)
+                .start(importTitleBasic)
+                .next(importNameBasic)
                 .next(importTitleCrews)
                 .next(importTitlePrinciples)
                 .next(importTitleRatings)
                 .build();
-
     }
+
+
+
 
 }
