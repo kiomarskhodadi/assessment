@@ -28,6 +28,6 @@ public class JobRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        jobLauncher.run(importPersonJob, new JobParameters());
+//        jobLauncher.run(importPersonJob, new JobParameters());
     }
 }

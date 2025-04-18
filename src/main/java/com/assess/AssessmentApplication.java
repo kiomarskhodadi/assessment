@@ -64,4 +64,17 @@ public class AssessmentApplication {
 		return executor;
 	}
 
+	@Bean
+	public TaskExecutor taskFileSearchFirst() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(15);
+		executor.setMaxPoolSize(30);
+		executor.setQueueCapacity(20);
+		executor.setThreadNamePrefix("Search-thread-thread-");
+		executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+		executor.setKeepAliveSeconds(2);
+		executor.initialize();
+		return executor;
+	}
+
 }

@@ -29,4 +29,14 @@ public class GeneralUtility {
         return retVal;
     }
 
+    public static Integer convertToId(String str){
+        Integer retVal ;
+        try{
+            retVal = Integer.parseInt(str.substring(2,str.length()));
+        }catch (Exception e){
+            retVal = null;
+        }
+        return retVal;
+    }
+
 }
