@@ -29,17 +29,6 @@ spring:
         order_inserts: true
         order_updates: true
         generate_statistics: false
-#  sql:
-#    init:
-#      mode: always
-#  freemarker:
-#    allow-session-override:
-#  batch:
-#    tialize-schema: always
-#    jdbc:
-#      initialize-schema: always
-#    job:
-#      enabled: false
   h2:
     console:
       enable: true
@@ -47,4 +36,7 @@ spring:
       settings:
         web-allow-others: true
     defer-datasource-initialization: true
+config:
+    h2-method: true
+
 

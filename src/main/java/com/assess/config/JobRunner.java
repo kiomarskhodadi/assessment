@@ -5,6 +5,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JobRunner implements CommandLineRunner {
+    @Value("${config.h2-method}")
+    private boolean h2Method;
+
     @Autowired
     public JobRunner(JobLauncher jobLauncher, @Qualifier("importDataJob") Job job) {
         this.jobLauncher = jobLauncher;
@@ -28,6 +32,8 @@ public class JobRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        jobLauncher.run(importPersonJob, new JobParameters());
+        if(h2Method){
+            jobLauncher.run(importPersonJob, new JobParameters());
+        }
     }
 }
